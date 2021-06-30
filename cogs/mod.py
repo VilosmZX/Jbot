@@ -12,6 +12,7 @@ class Mod(commands.Cog):
    # Command starts from here 
    @commands.command(name='purge')
    @commands.has_permissions(manage_messages=True)
+   @commands.command(rate=1, per=30)
    async def purge(self, ctx, amount : int = 0):
       if amount == 0:
          return 
@@ -25,6 +26,7 @@ class Mod(commands.Cog):
          
    @commands.command(name='kick')
    @commands.has_permissions(kick_members = True)
+   @commands.cooldown(rate=1, per=30)
    async def kick(self, ctx, member : discord.Member = None, *, reason : str = "no reason"):
       if member == None:
          await ctx.reply("```Please enter target name.```")
@@ -41,6 +43,7 @@ class Mod(commands.Cog):
    
    @commands.command('ban')
    @commands.has_permissions(ban_members=True)
+   @commands.cooldown(rate=1, per=30)
    async def ban(self, ctx, member : discord.Member = None, *, reason : str = "no reason"):
       if member == None:
          await ctx.reply("```Please enter target name.```")
@@ -54,6 +57,8 @@ class Mod(commands.Cog):
          embed.add_field(name='Banned by: ', value=ctx.author.mention, inline=False)
          embed.set_footer(icon=ctx.author.icon_url, text=f"Today at {time_now}")
          await ctx.send(embed=embed)
+         
+      
       
 def setup(bot):
    bot.add_cog(Mod(bot))
