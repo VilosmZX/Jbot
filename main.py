@@ -1,7 +1,10 @@
 import random
 import discord
 import os 
-from discord.ext import commands, tasks 
+from discord.ext import commands, tasks
+from discord.ext.commands import cooldowns
+from discord.ext.commands.core import cooldown
+from discord.ext.commands.errors import BadArgument, CommandOnCooldown, MissingPermissions 
 import dotenv 
 
 dotenv.load_dotenv()
@@ -16,6 +19,15 @@ async def on_ready():
 async def on_message(ctx):
     if ctx.author == bot.user:
         return 
+    
+@bot.event 
+async def on_command_error(ctx, error):
+    if isinstance(error, MissingPermissions):
+        await ctx.reply("```Missing permissions ❌ ```")
+    elif isinstance(error, BadArgument):
+        await ctx.reply("```Missing arguments ❌```")
+    elif isinstance(error, CommandOnCooldown):
+        ctx.reply(f"```Please wait for a few seconds before using this command again ❌```")
 
 if __name__ == '__main__':
     for command in os.listdir('./cogs'):
