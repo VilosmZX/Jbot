@@ -2,9 +2,11 @@ import random
 import discord
 import os 
 from discord.ext import commands, tasks 
+import dotenv 
 
+dotenv.load_dotenv()
 bot = commands.Bot(command_prefix='-')
-token = 'ODU5MTA0MzQ2NzI0MzY4NDM0.YNn1RQ.Ai5qoIvAvsK0WCsS3z0hADkAi6s'
+TOKEN = os.getenv("TOKEN")
 
 @bot.event
 async def on_ready():
@@ -26,4 +28,4 @@ if __name__ == '__main__':
                 print(f"ERROR: {error}".upper())
 
 
-bot.run(token)
+bot.run(TOKEN)
