@@ -4,31 +4,25 @@ import datetime
 
 timestamp = datetime.datetime.now()
 time_now = timestamp.strftime(r"%I:%M %p")
+
 class Mod(commands.Cog):
-    def _init__(self, bot):
-        self.bot = bot 
-
-    @commands.command(name='kick')
-    @commands.has_permissions(kick_members = True)
-    @commands.cooldown(rate=1, per=60)
-    async def kick(self, ctx, target : discord.Member = None, *, reason : str = None):
-        if reason is None:
-            reason = "no reason"
-
-        if target is None:
-            await ctx.reply("```Masukan target!```")
-
-        if target != None and reason != None:
-            await target.kick(reason=reason)
-            embed = discord.Embed(
-                title = f"Kick Berhasil!",
-                color = ctx.author.color
-            )
-            embed.add_field(name='<< Target >> ', value=f"{target.mention}")
-            embed.add_field(name='<< Alasan >>  ', value=f"{reason}")
-            embed.set_footer(icon_url=ctx.author.icon_url, text=f"Kicked by {ctx.author}  |  Today at {time_now}")
-            await ctx.send(embed=embed)
-
+   def __init__(self, bot):
+      self.bot = bot 
+      
+   # Command starts from here 
+   @commands.command(name='purge')
+   @commands.has_permissions(manage_messages=True)
+   async def purge(self, ctx, amount : int = 0):
+      if amount == 0:
+         return 
+      else:
+         await ctx.channel.purge(limit=amount)
+         embed = discord.Embed(
+            title = f"{amount} message has been cleared",
+            color = discord.Color.green()
+         )
+         embed.set_footer(icon=ctx.author.icon_url, text=f"Command executed by {ctx.author.mention}  |  Today at {time_now}")
+         
 def setup(bot):
-    bot.add_cog(Mod(bot))
+   bot.add_cog(Mod(bot))
         
