@@ -25,7 +25,7 @@ class Mod(commands.Cog):
          
    @commands.command(name='kick')
    @commands.has_permissions(kick_members = True)
-   async def kick(self, ctx, member : discord.Member = None, reason : str = "no reason"):
+   async def kick(self, ctx, member : discord.Member = None, *, reason : str = "no reason"):
       if member == None:
          await ctx.reply("```Please enter target name.```")
       else:
@@ -38,6 +38,23 @@ class Mod(commands.Cog):
          embed.add_field(name='Kicked by: ', value=ctx.author.mention, inline=False)
          embed.set_footer(icon=ctx.author.icon_url, text=f"Today at {time_now}")
          await ctx.send(embed=embed)
+   
+   @commands.command('ban')
+   @commands.has_permissions(ban_members=True)
+   async def ban(self, ctx, member : discord.Member = None, *, reason : str = "no reason"):
+      if member == None:
+         await ctx.reply("```Please enter target name.```")
+      else:
+         await member.ban(reason=reason)
+         embed = discord.Embed(
+            title = "Ban Sucess!",
+            color = discord.Color.blue()
+         )
+         embed.add_field(name='Target: ', value=member.mention, inline=False)
+         embed.add_field(name='Banned by: ', value=ctx.author.mention, inline=False)
+         embed.set_footer(icon=ctx.author.icon_url, text=f"Today at {time_now}")
+         await ctx.send(embed=embed)
+      
 def setup(bot):
    bot.add_cog(Mod(bot))
         
